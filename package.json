@@ -1,0 +1,19 @@
+{
+  "name": "airdrops",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/llamafolio/airdrops.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/llamafolio/airdrops/issues"
+  },
+  "homepage": "https://github.com/llamafolio/airdrops#readme"
+}
