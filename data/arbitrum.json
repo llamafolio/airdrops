@@ -1,0 +1,12 @@
+[
+  {
+    "protocol": "native",
+    "website": "https://arbitrum.io",
+    "announcement": "https://twitter.com/arbitrum/status/1636362096714690562",
+    "token": "ARB",
+    "contract": "0x912CE59144191C1204E64559FE8253a0e49E6548",
+    "eligibility": "claim",
+    "start": "2023-03-23T00:00:00.000Z",
+    "end": "2023-08-09T00:00:00.000Z"
+  }
+]

@@ -1,16 +1,9 @@
 {
   "name": "airdrops",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/llamafolio/airdrops.git"
-  },
-  "author": "",
+  "description": "DeFi Airdrops Registry",
+  "repository": "github:llamafolio/airdrops",
+  "author": "LlamaFolio Development Team",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/llamafolio/airdrops/issues"
