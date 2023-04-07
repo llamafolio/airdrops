@@ -4,9 +4,22 @@
   "description": "DeFi Airdrops Registry",
   "repository": "github:llamafolio/airdrops",
   "author": "LlamaFolio Development Team",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/llamafolio/airdrops/issues"
   },
-  "homepage": "https://github.com/llamafolio/airdrops#readme"
+  "homepage": "https://github.com/llamafolio/airdrops#readme",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "^0.5.0"
+  },
+  "dependencies": {
+    "@elysiajs/html": "^0.1.0",
+    "@elysiajs/swagger": "^0.3.0",
+    "elysia": "^0.4.5"
+  }
 }
