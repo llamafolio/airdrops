@@ -1,11 +1,12 @@
 import { Elysia, t } from "elysia";
 import { html } from "@elysiajs/html";
 import { swagger } from "@elysiajs/swagger";
-import { chains, API_VERSION } from "#/constants";
-import { getAirdrops } from "#/get-airdrops";
-import { landingHTML } from "#/landing";
-import { dateHygene, stringToObject } from "#/utilities";
+import { staticPlugin } from "@elysiajs/static";
 import type { Airdrop } from "#/types";
+import { landingHTML } from "#/landing";
+import { getAirdrops } from "#/get-airdrops";
+import { chains, API_VERSION } from "#/constants";
+import { dateHygene, stringToObject } from "#/utilities";
 
 const app = new Elysia();
 
@@ -23,22 +24,28 @@ app
       exclude: ["/", /.*docs.*/, `/${API_VERSION}`],
     })
   )
+  .use(staticPlugin())
   .use(html());
 
+/**
+ * Error handler. All thrown errors will be handled here.
+ */
 app.onError((context) => {
-  console.log(context);
-  return new Response(context.error.toString(), {
+  return new Response(JSON.stringify({ error: context.error.message }), {
     status: context.set.status,
-  });
+  }).json();
 });
+
+app.get("/favicon.ico", () => Bun.file("public/favicon.ico"));
 
 app.get("/version", () => API_VERSION);
 
+/* make sure we always use version path parameter */
 app.get("/", (context) => (context.set.redirect = `/${API_VERSION}`));
 
 app.group(`/${API_VERSION}`, (app) =>
   app
-    // @ts-ignore
+    // @ts-ignore: types broken
     .get("/", (context) => context.html(landingHTML))
     /**
      * Endpoint: /v1/docs
@@ -66,8 +73,11 @@ app.group(`/${API_VERSION}`, (app) =>
          */
         .get(
           "/:chain",
-          async ({ params }) => await getAirdrops(params.chain),
-          // this is for the query parameter filter
+          async ({ params }) => {
+            if (!params.chain)
+              throw new Error("Either /all or /:chain path param is required");
+            return await getAirdrops(params.chain);
+          },
           {
             schema: {
               query: t.Optional(t.Object({ filter: t.Optional(t.String()) })),
@@ -85,43 +95,52 @@ app.group(`/${API_VERSION}`, (app) =>
          *
          * Currently it only supports filtering by a single property.
          *
-         * Valid keys are: protocol, token, contract, start, end, website
+         * Valid keys are: `protocol`, `token`, `contract`, `start`, `end`, `website`
          *
          * For `start` and `end`, the value should be a date string in the format of YYYY-MM-DD
          * Example: /v1/airdrops/:chain/{"start":"2021-09-01"}
          *
          * When using `start`, the airdrop's start date must be on or after the given date.
          * When using `end`, the airdrop's end date must be on or before the given date.
-         *
          */
         .get("/:chain/:filter", async (context) => {
+          if (!chains.includes(context.params.chain))
+            throw new Error(
+              `Invalid chain. Valid chains are: ${chains.join(", ")}`
+            );
           // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent
           const filter = decodeURIComponent(context.params.filter);
           try {
-            let { key, value } = stringToObject<Airdrop>(filter);
-            const usingDateFilter = ["start", "end"].includes(key);
-            if (usingDateFilter) value = dateHygene(value);
+            let { key: filterKey, value: filterValue } =
+              stringToObject<Airdrop>(filter);
             const airdrops = await getAirdrops(context.params.chain);
+            const usingDateFilter = ["start", "end"].includes(filterKey);
+            if (!usingDateFilter) {
+              return airdrops.filter(
+                (airdrop) => airdrop[filterKey] === filterValue
+              );
+            }
+            filterValue = dateHygene(filterValue);
             return airdrops.filter((airdrop) => {
-              if (!usingDateFilter) return airdrop[key] === value;
-              const date = new Date(airdrop[key]);
-              if (key === "start") {
-                return date >= new Date(value);
+              const date = new Date(airdrop[filterKey]);
+              if (filterKey === "start") {
+                return date >= new Date(filterValue);
               }
-              if (key === "end") {
-                return date <= new Date(value);
+              if (filterKey === "end") {
+                return date <= new Date(filterValue);
               }
             });
-          } catch (error) {
+          } catch {
             throw new Error(
               `Invalid filter: ${filter}. See README.md in repo for reference.`
             );
           }
         })
     )
-);
+)
 
-app.listen(process.env.PORT);
+app.listen(
+  process.env.PORT);
 
 console.info(
   `🦊 Airdrops is running at http://${app.server?.hostname}:${app.server?.port}`

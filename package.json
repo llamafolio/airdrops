@@ -10,19 +10,21 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "start": "bun run --hot src/index.ts",
-    "build": "docker build . --no-cache --progress plain --file ./Dockerfile --build-arg PORT='3033' --tag llamafolio-airdrops",
-    "deploy:docker": "docker push llamafolio-airdrops",
-    "deploy": "railway up --service='airdrop-api' --detach"
+    "lint": "bunx denolint --config .denolint.json",
+    "deploy": "railway up --service='airdrop-api' --detach",
+    "clean": "rm -rf node_modules bun.lockb"
   },
   "license": "ISC",
   "bugs": "github:llamafolio/airdrops/issues",
   "homepage": "github:llamafolio/airdrops",
   "dependencies": {
     "@elysiajs/html": "^0.1.0",
+    "@elysiajs/static": "^0.3.2",
     "@elysiajs/swagger": "^0.3.0",
     "elysia": "^0.4.5"
   },
   "devDependencies": {
+    "@node-rs/deno-lint": "^1.16.0",
     "bun-types": "^0.5.0"
   }
 }

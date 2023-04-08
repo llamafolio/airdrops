@@ -15,5 +15,6 @@ export const dataPath = Bun.fileURLToPath(new URL("../data", import.meta.url));
 export const links = [
   ["Source code", "https://github.com/llamafolio/airdrops"],
   ["LlamaFolio", "https://llamafolio.com"],
-  ["GitHub", "https://github.com//llamafolio"]
+  ["GitHub", "https://github.com//llamafolio"],
+  ["Twitter", "https://twitter.com/llamafolio"],
 ];
