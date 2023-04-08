@@ -4,8 +4,10 @@
 # except the following
 !src
 !data
+!public
 !tsconfig.json
 !package.json
+!bun.lockb
 !.dockerignore
 !.gitignore
 !Dockerfile

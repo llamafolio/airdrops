@@ -10,7 +10,7 @@ export const landingHTML =
           rel="stylesheet"
           href="https://unpkg.com/@picocss/pico/css/pico.min.css"
         />
-        <link href="/public/favicon.svg" rel="icon" type="image/svg+xml" />
+        <link href="public/favicon.svg" rel="icon" type="image/svg+xml" />
         <title>Airdrops API ${API_VERSION}</title>
       </head>
       <body>
