@@ -4,6 +4,7 @@ import { swagger } from "@elysiajs/swagger";
 import { chains, API_VERSION } from "#/constants";
 import { getAirdrops } from "#/get-airdrops";
 import { landingHTML } from "#/landing";
+import { dateHygene, stringToObject } from "#/utilities";
 import type { Airdrop } from "#/types";
 
 const app = new Elysia();
@@ -24,19 +25,19 @@ app
   )
   .use(html());
 
+app.onError((context) => {
+  console.log(context);
+  return new Response(context.error.toString(), {
+    status: context.set.status,
+  });
+});
+
 app.get("/version", () => API_VERSION);
 
 app.get("/", (context) => (context.set.redirect = `/${API_VERSION}`));
 
-app.onError(({ error, code }) => ({ error, code }));
-/**
- * Endpoint: /v1
- */
 app.group(`/${API_VERSION}`, (app) =>
   app
-    /**
-     * Endpoint: /v1
-     */
     // @ts-ignore
     .get("/", (context) => context.html(landingHTML))
     /**
@@ -44,7 +45,7 @@ app.group(`/${API_VERSION}`, (app) =>
      */
     .get("/docs", (context) => (context.set.redirect = `/docs`))
     /**
-     * Endpoint: /v1/airdrops
+     * Not a valid endpoint
      */
     .group("/airdrops", (app) =>
       app
@@ -65,7 +66,7 @@ app.group(`/${API_VERSION}`, (app) =>
          */
         .get(
           "/:chain",
-          async ({ query, params }) => await getAirdrops(params.chain),
+          async ({ params }) => await getAirdrops(params.chain),
           // this is for the query parameter filter
           {
             schema: {
@@ -74,21 +75,47 @@ app.group(`/${API_VERSION}`, (app) =>
           }
         )
         /**
-         * Endpoint: /v1/airdrops/:chain/{"website":"https://arbitrum.io"}
+         * Endpoint: /v1/airdrops/:chain/:filter
+         * Structure: /v1/airdrops/:chain/{"key":"value"}
+         * Example: /v1/airdrops/:chain/{"website":"https://arbitrum.io"}
+         *
+         * The filter path parameter takes a stringified JSON object where
+         *    - key is the property of the Airdrop type,
+         *    - and value is the value of the property.
+         *
+         * Currently it only supports filtering by a single property.
+         *
+         * Valid keys are: protocol, token, contract, start, end, website
+         *
+         * For `start` and `end`, the value should be a date string in the format of YYYY-MM-DD
+         * Example: /v1/airdrops/:chain/{"start":"2021-09-01"}
+         *
+         * When using `start`, the airdrop's start date must be on or after the given date.
+         * When using `end`, the airdrop's end date must be on or before the given date.
+         *
          */
         .get("/:chain/:filter", async (context) => {
           // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent
           const filter = decodeURIComponent(context.params.filter);
           try {
-            const [[filterKey, filterValue]] = Object.entries(
-              JSON.parse(filter)
-            ) as Array<[keyof Airdrop, string]>;
+            let { key, value } = stringToObject<Airdrop>(filter);
+            const usingDateFilter = ["start", "end"].includes(key);
+            if (usingDateFilter) value = dateHygene(value);
             const airdrops = await getAirdrops(context.params.chain);
-            return airdrops.filter((airdrop) =>
-              airdrop[filterKey].includes(filterValue)
-            );
+            return airdrops.filter((airdrop) => {
+              if (!usingDateFilter) return airdrop[key] === value;
+              const date = new Date(airdrop[key]);
+              if (key === "start") {
+                return date >= new Date(value);
+              }
+              if (key === "end") {
+                return date <= new Date(value);
+              }
+            });
           } catch (error) {
-            throw new Error(`Invalid filter: ${filter}`);
+            throw new Error(
+              `Invalid filter: ${filter}. See README.md in repo for reference.`
+            );
           }
         })
     )
