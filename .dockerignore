@@ -1,0 +1,11 @@
+# ignore everything
+*
+
+# except the following
+!src
+!data
+!tsconfig.json
+!package.json
+!.dockerignore
+!.gitignore
+!Dockerfile

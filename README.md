@@ -2,15 +2,18 @@
 
 Register of airdrops from DeFi and other crypto projects by LlamaFolio
 
+REST API: [https://airdrop.up.railway.app](https://airdrops.up.railway.app/)
+Data Source: `./src/data/`
 ____
 
-#### Adding new airdrops to registry:
-@o-az
+#### Adding new airdrops to registry
+
 TODO
 
-#### Get started for development:
+#### Get started for development
 
 Ensure `bun` is installed
+
 ```sh
 bun --upgrade
 ```
@@ -25,7 +28,9 @@ curl -fsSL <https://bun.sh/install> | bash
 ```sh
 bun --version
 ```
+
 ↑ should work now
+
 ```sh
 bun install
 ```
@@ -33,4 +38,30 @@ bun install
 ```sh
 bun run dev
 ```
-open browser at http://0.0.0.0:3033
+
+open browser at <http://0.0.0.0:3033>
+
+#### Run in docker locally
+
+First, build:
+
+```sh
+docker build . \
+  --no-cache \
+  --progress plain \
+  --file ./Dockerfile \
+  --build-arg PORT="3033" \
+  --tag llamafolio-airdrops
+```
+
+Then, run:
+
+```sh
+docker run \
+  -it \
+  --rm \
+  --publish 3033:3033 \
+  llamafolio-airdrops
+```
+
+open browser at <http://0.0.0.0:3033>

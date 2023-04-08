@@ -1,25 +1,28 @@
 {
-  "name": "airdrops",
+  "name": "@llamafolio/airdrops",
   "version": "1.0.0",
   "description": "DeFi Airdrops Registry",
   "repository": "github:llamafolio/airdrops",
   "author": "LlamaFolio Development Team",
+  "type": "module",
+  "main": "src/index.ts",
+  "module": "index.ts",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "start": "bun run --hot src/index.ts",
+    "build": "docker build . --no-cache --progress plain --file ./Dockerfile --build-arg PORT='3033' --tag llamafolio-airdrops",
+    "deploy:docker": "docker push llamafolio-airdrops",
+    "deploy": "railway up --service='airdrop-api' --detach"
   },
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/llamafolio/airdrops/issues"
-  },
-  "homepage": "https://github.com/llamafolio/airdrops#readme",
-  "module": "index.ts",
-  "type": "module",
-  "devDependencies": {
-    "bun-types": "^0.5.0"
-  },
+  "bugs": "github:llamafolio/airdrops/issues",
+  "homepage": "github:llamafolio/airdrops",
   "dependencies": {
     "@elysiajs/html": "^0.1.0",
     "@elysiajs/swagger": "^0.3.0",
     "elysia": "^0.4.5"
+  },
+  "devDependencies": {
+    "bun-types": "^0.5.0"
   }
 }
