@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/node18/tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "paths": {
+      "#/core/*": ["../core/src/*"]
+    }
+  }
+}

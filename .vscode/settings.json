@@ -1,0 +1,15 @@
+{
+  "search.exclude": {
+    ".git": true,
+    "**/.sst": true,
+    "**/node_modules": true,
+    "pnpm-lock.yaml": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "editor.defaultFormatter": "rome.rome",
+  "editor.formatOnSave": true,
+  "[javascript][javascriptreact][typescript][json][jsonc][json5][typescriptreact]": {
+    "editor.defaultFormatter": "rome.rome"
+  }
+}
