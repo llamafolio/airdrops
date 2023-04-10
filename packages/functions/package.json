@@ -12,7 +12,6 @@
     "sst": "2.5.1"
   },
   "dependencies": {
-    "ts-pattern": "^4.2.2",
     "viem": "^0.2.14"
   }
 }
