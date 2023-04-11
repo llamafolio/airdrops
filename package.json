@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "workspaces": ["packages/*"],
   "scripts": {
     "dev": "sst dev",
     "build": "sst build",
@@ -22,6 +23,7 @@
     "aws-cdk-lib": "2.73.0",
     "constructs": "10.1.306",
     "rome": "12.0.0",
+    "bumpp": "^9.1.0",
     "sst": "2.5.1",
     "typescript": "^5.0.4"
   },
@@ -31,9 +33,5 @@
     "pnpm": ">=8.0.0",
     "npm": "please-use-pnpm",
     "yarn": "please-use-pnpm"
-  },
-  "workspaces": ["packages/*"],
-  "dependencies": {
-    "bumpp": "^9.1.0"
   }
 }

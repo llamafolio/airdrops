@@ -2,7 +2,8 @@
   "$schema": "./node_modules/rome/configuration_schema.json",
   "files": {
     "ignore": [
-      "**/.sst", "**/.build", "sst-env.d.ts", "tsconfig.json", "tsconfig.*.json", "**/node_modules", "pnpm-lock.yaml"
+      "**/.sst", "**/.build", "sst-env.d.ts", "tsconfig.json", "tsconfig.*.json", "**/node_modules", "pnpm-lock.yaml",
+      ".vscode/**"
     ]
   },
   "formatter": {

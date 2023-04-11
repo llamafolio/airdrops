@@ -9,7 +9,10 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.defaultFormatter": "rome.rome",
   "editor.formatOnSave": true,
-  "[javascript][javascriptreact][typescript][json][jsonc][json5][typescriptreact]": {
+  "[javascript][javascriptreact][typescript][json][typescriptreact]": {
     "editor.defaultFormatter": "rome.rome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
   }
 }
