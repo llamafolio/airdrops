@@ -9,9 +9,12 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
+    "test": "sst bind -- vitest run",
+    "test:ui": "sst bind -- vitest ui",
     "typecheck": "tsc --noEmit",
     "lint": "rome check . --apply",
-    "format": "rome format . --write"
+    "format": "rome format . --write",
+    "clean": "/bin/bash scripts/clean.sh"
   },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.1",
@@ -23,9 +26,10 @@
   },
   "packageManager": ">=pnpm@8.0.0",
   "engines": {
+    "node": ">=18.x",
+    "pnpm": ">=8.0.0",
     "npm": "please-use-pnpm",
-    "yarn": "please-use-pnpm",
-    "pnpm": ">=8.0.0"
+    "yarn": "please-use-pnpm"
   },
   "workspaces": [
     "packages/*"

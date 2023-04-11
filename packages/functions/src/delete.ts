@@ -3,7 +3,6 @@ import { Table } from 'sst/node/table'
 import { ApiHandler } from 'sst/node/api'
 import { stringify, jsonHeaders } from '#/core/json'
 import { type Airdrop } from '#/core/types'
-import { isParse } from 'typia'
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
@@ -16,7 +15,7 @@ export const handler = ApiHandler(async (event) => {
     }
   }
 
-  const data = isParse<Pick<Airdrop, 'chain' | 'protocol'>>(event.body)
+  const data = <Airdrop>JSON.parse(event.body)
   if (!data) {
     return {
       statusCode: 400,

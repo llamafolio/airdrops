@@ -9,6 +9,7 @@ export function API(context: StackContext) {
   const api = new Api(context.stack, 'Api', {
     defaults: {
       function: {
+        runtime: 'nodejs18.x',
         bind: [
           /**
            * Parameters

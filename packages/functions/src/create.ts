@@ -13,7 +13,6 @@ export const handler = ApiHandler(async (event) => {
       body: stringify({ error: 'Missing body' }),
     }
   }
-
   const data = JSON.parse(event.body)
   try {
     const parameters: AWS.DynamoDB.DocumentClient.PutItemInput = {
